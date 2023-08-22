@@ -17,8 +17,8 @@ func Routes(e *echo.Echo) {
 	e.DELETE("/mongo/api/v1/record/delete/:id", api.MongoApi().DeleteById)
 
 	e.GET("/redis/api", api.RedisApi().ApiIndex)
-	e.POST("/redis/api/v1/record/add", api.MongoApi().Add)
-	e.GET("/redis/api/v1/record/list", api.MongoApi().GetAll)
-	e.GET("/redis/api/v1/record/get", api.MongoApi().GetById)
-	e.DELETE("/redis/api/v1/record/delete/:id", api.MongoApi().DeleteById)
+	e.POST("/redis/api/v1/record/add", api.RedisApi().Add)
+	e.GET("/redis/api/v1/record/keys", api.RedisApi().GetAllKeys)
+	e.GET("/redis/api/v1/record/:key", api.RedisApi().GetByKey)
+	e.DELETE("/redis/api/v1/record/delete/:key", api.RedisApi().DeleteByKey)
 }

@@ -12,7 +12,7 @@ import (
 type RedisApiInf interface {
 	ApiIndex(c echo.Context) error
 	Add(c echo.Context) error
-	GetAll(c echo.Context) error
+	GetAllKeys(c echo.Context) error
 	GetByKey(c echo.Context) error
 	DeleteByKey(c echo.Context) error
 }
@@ -53,7 +53,7 @@ func (h *redis_api) Add(c echo.Context) error {
 	return c.JSON(http.StatusOK, _type.Response().Success(response, ""))
 }
 
-func (h *redis_api) GetAll(c echo.Context) error {
+func (h *redis_api) GetAllKeys(c echo.Context) error {
 	resp, _ := cp_redis.GetAllKeys()
 
 	response := _type.ResponseDto{
