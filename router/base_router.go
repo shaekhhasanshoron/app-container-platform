@@ -15,4 +15,10 @@ func Routes(e *echo.Echo) {
 	e.GET("/mongo/api/v1/record/list", api.MongoApi().GetAll)
 	e.GET("/mongo/api/v1/record/get", api.MongoApi().GetById)
 	e.DELETE("/mongo/api/v1/record/delete/:id", api.MongoApi().DeleteById)
+
+	e.GET("/redis/api", api.RedisApi().ApiIndex)
+	e.POST("/redis/api/v1/record/add", api.MongoApi().Add)
+	e.GET("/redis/api/v1/record/list", api.MongoApi().GetAll)
+	e.GET("/redis/api/v1/record/get", api.MongoApi().GetById)
+	e.DELETE("/redis/api/v1/record/delete/:id", api.MongoApi().DeleteById)
 }

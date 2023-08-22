@@ -3,6 +3,7 @@ package main
 import (
 	"app-container-platform/config"
 	"app-container-platform/db/cp_mongodb"
+	"app-container-platform/db/cp_redis"
 	"app-container-platform/router"
 	"app-container-platform/server"
 	"github.com/labstack/echo/v4"
@@ -24,6 +25,11 @@ func main() {
 		_ = cp_mongodb.InitMongoDbWriteConnection()
 		_ = cp_mongodb.InitMongoDbReadConnection()
 		cp_mongodb.InitDBCollections()
+	}
+
+	if config.ConnectRedis == "true" {
+		_ = cp_redis.InitRedisWriteConnection()
+		_ = cp_redis.InitRedisReadConnection()
 	}
 
 	srv := server.New()
