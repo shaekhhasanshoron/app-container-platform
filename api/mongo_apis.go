@@ -8,6 +8,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type MongoApiInf interface {
@@ -34,7 +35,6 @@ func (h *mongo_api) ApiIndex(c echo.Context) error {
 }
 
 func (h *mongo_api) Add(c echo.Context) error {
-	log.Println("Add")
 	inputReq := new(model.RecordConfig)
 	if err := c.Bind(inputReq); err != nil {
 		log.Println(fmt.Errorf("[ERROR] Invalid Input!"))
@@ -56,7 +56,6 @@ func (h *mongo_api) Add(c echo.Context) error {
 }
 
 func (h *mongo_api) GetAll(c echo.Context) error {
-	log.Println("Get List")
 	resp, _ := model.RecordConfig{}.GetListFromMongo(make(map[string]interface{}))
 
 	response := _type.ResponseDto{
@@ -68,7 +67,6 @@ func (h *mongo_api) GetAll(c echo.Context) error {
 }
 
 func (h *mongo_api) GetById(c echo.Context) error {
-	log.Println("Get")
 	databaseIdStr := c.QueryParams().Get("id")
 	databaseUIdStr := c.QueryParams().Get("uid")
 	resp := model.RecordConfig{}
@@ -85,7 +83,13 @@ func (h *mongo_api) GetById(c echo.Context) error {
 			return c.JSON(http.StatusInternalServerError, _type.Response().Error("Could not found record: "+err.Error()))
 		}
 	} else if databaseUIdStr != "" {
-		resp, err = model.RecordConfig{}.GetByUIdFromMongo(databaseUIdStr)
+		databaseUId, err := strconv.Atoi(databaseUIdStr)
+		if err != nil {
+			log.Println("Invalid UId: " + databaseUIdStr + " -- " + err.Error())
+			return c.JSON(http.StatusBadRequest, _type.Response().Error("Invalid UId: "+err.Error()))
+		}
+
+		resp, err = model.RecordConfig{}.GetByUIdFromMongo(databaseUId)
 		if err != nil {
 			log.Println("Error occurred By UID: " + err.Error())
 			return c.JSON(http.StatusInternalServerError, _type.Response().Error("Could not found record: "+err.Error()))
@@ -101,7 +105,6 @@ func (h *mongo_api) GetById(c echo.Context) error {
 }
 
 func (h *mongo_api) DeleteById(c echo.Context) error {
-	log.Println("Delete")
 	databaseIdStr := c.Param("id")
 	if databaseIdStr == "" || !bson.IsObjectIdHex(databaseIdStr) {
 		log.Println("Invalid Id: " + databaseIdStr)

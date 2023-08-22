@@ -39,7 +39,7 @@ func (db RecordConfig) GetByIdFromMongo(id bson.ObjectId) (RecordConfig, error) 
 	return *existingDatabase, nil
 }
 
-func (db RecordConfig) GetByUIdFromMongo(uid string) (RecordConfig, error) {
+func (db RecordConfig) GetByUIdFromMongo(uid int) (RecordConfig, error) {
 	query := bson.M{"$and": []bson.M{
 		bson.M{"uid": uid},
 	},
