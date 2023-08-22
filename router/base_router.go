@@ -19,6 +19,6 @@ func Routes(e *echo.Echo) {
 	e.GET("/redis/api", api.RedisApi().ApiIndex)
 	e.POST("/redis/api/v1/record/add", api.RedisApi().Add)
 	e.GET("/redis/api/v1/record/keys", api.RedisApi().GetAllKeys)
-	e.GET("/redis/api/v1/record/:key", api.RedisApi().GetByKey)
-	e.DELETE("/redis/api/v1/record/delete/:key", api.RedisApi().DeleteByKey)
+	e.GET("/redis/api/v1/record/key/:key", api.RedisApi().GetByKey)
+	e.DELETE("/redis/api/v1/record/key/:key", api.RedisApi().DeleteByKey)
 }

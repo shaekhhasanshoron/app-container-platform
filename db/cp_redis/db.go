@@ -41,7 +41,7 @@ func Get(key string) (string, error) {
 }
 
 func GetAllKeys() ([]string, error) {
-	return redisDbForRead.Keys(context.Background(), "").Result()
+	return redisDbForRead.Keys(context.Background(), "*").Result()
 }
 
 func Delete(key string) error {
