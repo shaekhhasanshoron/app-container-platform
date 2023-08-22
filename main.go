@@ -20,9 +20,11 @@ func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c 
 
 func main() {
 	config.InitEnvironmentVariables()
-	_ = cp_mongodb.InitMongoDbWriteConnection()
-	_ = cp_mongodb.InitMongoDbReadConnection()
-	cp_mongodb.InitDBCollections()
+	if config.ConnectMongo == "true" {
+		_ = cp_mongodb.InitMongoDbWriteConnection()
+		_ = cp_mongodb.InitMongoDbReadConnection()
+		cp_mongodb.InitDBCollections()
+	}
 
 	srv := server.New()
 	renderer := &TemplateRenderer{
