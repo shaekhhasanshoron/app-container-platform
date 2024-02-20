@@ -52,7 +52,6 @@ func InitEnvironmentVariables() {
 	if RabbitMQUser != "" && RabbitMQPassword != "" {
 		RabbitMQConnectionUrl = "amqp://" + RabbitMQUser + ":" + RabbitMQPassword + "@" + RabbitMQServer + ":5672/"
 	}
-	RabbitMQConnectionUrl = "amqp://guest:guest@localhost:5672/"
 
 	log.Println("Run Mode: " + RunMode)
 	log.Println("Server Port: " + ServerPort)
