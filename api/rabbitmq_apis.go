@@ -3,6 +3,7 @@ package api
 import (
 	"app-container-platform/db/cp_rabbitmq"
 	_type "app-container-platform/types"
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"log"
 	"net/http"
@@ -33,7 +34,7 @@ func (r rabbitmqApi) Publish(c echo.Context) error {
 	}
 	err := cp_rabbitmq.PublishToRabbitMQ(queueName, message)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, "Error publishing message to RabbitMQ: %v")
+		return c.JSON(http.StatusInternalServerError, fmt.Errorf("error publishing message to RabbitMQ: %v", err))
 	}
 	return c.JSON(http.StatusOK, "Message published to RabbitMQ!")
 }

@@ -23,14 +23,14 @@ func InitRabbitMQConnection() error {
 	if err != nil {
 		log.Fatalf("Failed to connect to RabbitMQ: %v", err)
 	}
-	defer conn.Close()
+	//defer conn.Close()
 
 	// Open a channel
 	ch, err := conn.Channel()
 	if err != nil {
 		log.Fatalf("Failed to open a channel: %v", err)
 	}
-	defer ch.Close()
+	//defer ch.Close()
 	rmqChannel = ch
 
 	log.Println("Connected to RabbitMQ!")
@@ -48,7 +48,8 @@ func PublishToRabbitMQ(queueName, message string) error {
 			Body:        []byte(message),
 		})
 	if err != nil {
-		return fmt.Errorf("error publishing message to RabbitMQ: %v", err)
+		log.Println("unable to publish : " + err.Error())
+		return err
 	}
 	return nil
 }
