@@ -45,6 +45,7 @@ func InitEnvironmentVariables() {
 	RedisServerForRead = strings.TrimSpace(os.Getenv("REDIS_SERVER_FOR_READ"))
 	RedisServerPassword = strings.TrimSpace(os.Getenv("REDIS_SERVER_PASSWORD"))
 
+	ConnectRabbitMQ = strings.TrimSpace(os.Getenv("CONNECT_RABBITMQ"))
 	RabbitMQUser = strings.TrimSpace(os.Getenv("RABBITMQ_USER"))
 	RabbitMQPassword = strings.TrimSpace(os.Getenv("RABBITMQ_PASSWORD"))
 	RabbitMQServer = strings.TrimSpace(os.Getenv("RABBITMQ_SERVER"))
@@ -55,9 +56,9 @@ func InitEnvironmentVariables() {
 
 	log.Println("Run Mode: " + RunMode)
 	log.Println("Server Port: " + ServerPort)
-	log.Println("Database Name: " + DatabaseName)
 	log.Println("Mongo Connect: " + ConnectMongo)
 	log.Println("Redis Connect: " + ConnectRedis)
+	log.Println("Rabbitmq Connect: " + ConnectRabbitMQ)
 
 	if ConnectMongo == "true" {
 		log.Println("Mongo Conn String For Write: " + MongoDbConnectionStringForWrite)
