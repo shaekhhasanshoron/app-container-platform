@@ -21,6 +21,7 @@ func InitRabbitMQConnection() error {
 		log.Fatalf("Error connecting to RabbitMQ: %v", err)
 	}
 	defer rmq.Connection.Close()
+	defer rmq.Channel.Close()
 	fmt.Println("Connected to RabbitMQ!")
 	return nil
 }
