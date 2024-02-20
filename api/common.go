@@ -40,7 +40,7 @@ func syncToQueue(keys []string, queue string) {
 			log.Println(fmt.Sprintf("[ERROR] sync error - gettting data for key '%s': %s", key, err.Error()))
 			continue
 		}
-		log.Printf("data from redis -- %v :key: %v: %v\n", i, key, data)
+		log.Printf("publishing data from redis -- %v :key: %v\n", i, key)
 
 		err = cp_rabbitmq.PublishToRabbitMQ(queue, data)
 		if err != nil {
