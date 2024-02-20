@@ -50,7 +50,7 @@ func InitEnvironmentVariables() {
 	RabbitMQPassword = strings.TrimSpace(os.Getenv("RABBITMQ_PASSWORD"))
 	RabbitMQServer = strings.TrimSpace(os.Getenv("RABBITMQ_SERVER"))
 	if RabbitMQUser != "" && RabbitMQPassword != "" {
-		RabbitMQConnectionUrl = "amqp://" + RabbitMQUser + ":" + RabbitMQPassword + "@" + RabbitMQServer + ":5672"
+		RabbitMQConnectionUrl = "amqp://" + RabbitMQUser + ":" + RabbitMQPassword + "@" + RabbitMQServer + ":5672/"
 	}
 
 	log.Println("Run Mode: " + RunMode)
