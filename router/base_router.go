@@ -21,4 +21,10 @@ func Routes(e *echo.Echo) {
 	e.GET("/redis/api/v1/record/keys", api.RedisApi().GetAllKeys)
 	e.GET("/redis/api/v1/record/key/:key", api.RedisApi().GetByKey)
 	e.DELETE("/redis/api/v1/record/key/:key", api.RedisApi().DeleteByKey)
+
+	e.GET("/rabbitmq/api", api.RabbitmqApi().ApiIndex)
+	e.POST("/rabbitmq/api/v1/publish/:queue", api.RabbitmqApi().Publish)
+	e.GET("/rabbitmq/api/v1/consume", api.RabbitmqApi().Consume)
+
+	e.GET("/common/sync", api.CommonApi().PullFromRedisAndPublishToRabbitMQ)
 }

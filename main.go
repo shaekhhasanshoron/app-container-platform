@@ -3,6 +3,7 @@ package main
 import (
 	"app-container-platform/config"
 	"app-container-platform/db/cp_mongodb"
+	"app-container-platform/db/cp_rabbitmq"
 	"app-container-platform/db/cp_redis"
 	"app-container-platform/router"
 	"app-container-platform/server"
@@ -30,6 +31,10 @@ func main() {
 	if config.ConnectRedis == "true" {
 		_ = cp_redis.InitRedisWriteConnection()
 		_ = cp_redis.InitRedisReadConnection()
+	}
+
+	if config.ConnectRabbitMQ == "true" {
+		_ = cp_rabbitmq.InitRabbitMQConnection()
 	}
 
 	srv := server.New()

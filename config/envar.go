@@ -18,6 +18,12 @@ var RedisServerForWrite string
 var RedisServerForRead string
 var RedisServerPassword string
 
+var ConnectRabbitMQ string
+var RabbitMQUser string
+var RabbitMQPassword string
+var RabbitMQServer string
+var RabbitMQConnectionUrl string
+
 func InitEnvironmentVariables() {
 	RunMode = strings.TrimSpace(os.Getenv("RUN_MODE"))
 	if RunMode == "" {
@@ -39,6 +45,14 @@ func InitEnvironmentVariables() {
 	RedisServerForRead = strings.TrimSpace(os.Getenv("REDIS_SERVER_FOR_READ"))
 	RedisServerPassword = strings.TrimSpace(os.Getenv("REDIS_SERVER_PASSWORD"))
 
+	RabbitMQUser = strings.TrimSpace(os.Getenv("RABBITMQ_USER"))
+	RabbitMQPassword = strings.TrimSpace(os.Getenv("RABBITMQ_PASSWORD"))
+	RabbitMQServer = strings.TrimSpace(os.Getenv("RABBITMQ_SERVER"))
+	if RabbitMQUser != "" && RabbitMQPassword != "" {
+		RabbitMQConnectionUrl = "amqp://" + RabbitMQUser + ":" + RabbitMQPassword + "@" + RabbitMQServer + ":5672/"
+	}
+	RabbitMQConnectionUrl = "amqp://guest:guest@localhost:5672/"
+
 	log.Println("Run Mode: " + RunMode)
 	log.Println("Server Port: " + ServerPort)
 	log.Println("Database Name: " + DatabaseName)
@@ -54,5 +68,9 @@ func InitEnvironmentVariables() {
 		log.Println("Redis Server For Write: " + RedisServerForWrite)
 		log.Println("Mongo Server For Read: " + RedisServerForRead)
 		log.Println("Mongo Server Password: " + RedisServerPassword)
+	}
+
+	if ConnectRabbitMQ == "true" {
+		log.Println("connection string for rabbitmq: " + RabbitMQConnectionUrl)
 	}
 }

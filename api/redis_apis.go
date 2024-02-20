@@ -35,7 +35,7 @@ func (h *redis_api) ApiIndex(c echo.Context) error {
 func (h *redis_api) Add(c echo.Context) error {
 	inputReq := new(_type.RedisInput)
 	if err := c.Bind(inputReq); err != nil {
-		log.Println(fmt.Errorf("[ERROR] Invalid Input!"))
+		log.Println(fmt.Errorf("[ERROR] Invalid Input"))
 		return err
 	}
 
