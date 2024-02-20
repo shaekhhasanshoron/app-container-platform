@@ -72,5 +72,8 @@ func InitEnvironmentVariables() {
 
 	if ConnectRabbitMQ == "true" {
 		log.Println("connection string for rabbitmq: " + RabbitMQConnectionUrl)
+		log.Println("rabbitMQ server: " + RabbitMQServer)
+		log.Println("rabbitMQ user: " + RabbitMQUser)
+		log.Println("rabbitMQ password: " + RabbitMQPassword)
 	}
 }
