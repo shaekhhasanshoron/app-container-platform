@@ -60,6 +60,7 @@ func PublishToRabbitMQ(queueName, message string) error {
 }
 
 func ConsumeFromRabbitMQ(queueName string) (<-chan amqp.Delivery, error) {
+	log.Println("consume 1")
 	msgs, err := rmq.Channel.Consume(
 		queueName, // queue
 		"",        // consumer

@@ -40,6 +40,7 @@ func (r rabbitmqApi) Publish(c echo.Context) error {
 
 func (r rabbitmqApi) Consume(c echo.Context) error {
 	queueName := c.QueryParam("queue")
+	log.Println("consume")
 	msgs, err := cp_rabbitmq.ConsumeFromRabbitMQ(queueName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, "Error consuming messages from RabbitMQ: %v")
