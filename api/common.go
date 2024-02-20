@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type CommonAPiInf interface {
@@ -22,12 +23,22 @@ func (c2 commonApi) PullFromRedisAndPublishToRabbitMQ(c echo.Context) error {
 		queue = "default"
 	}
 
+	threads := c.QueryParam("threads")
+	if threads == "" {
+		threads = "1"
+	}
+
+	threadsVal, _ := strconv.Atoi(threads)
+
 	keys, err := cp_redis.GetAllKeys()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, "error getting key from redis")
 	}
 
-	go syncToQueue(keys, queue)
+	for i := 0; i < threadsVal; i++ {
+		go syncToQueue(keys, queue)
+	}
+
 	return c.JSON(http.StatusOK, "sync has been started")
 }
 
