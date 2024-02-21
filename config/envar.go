@@ -14,6 +14,9 @@ var MongoDbConnectionStringForRead string
 var DatabaseName string
 
 var ConnectRedis string
+var RedisConnectionType string // MASTER_SLAVE / SENTINEL / CLUSTER
+var RedisSentinelServer string
+var RedisSentinelMasterName string
 var RedisServerForWrite string
 var RedisServerForRead string
 var RedisServerPassword string
@@ -41,9 +44,13 @@ func InitEnvironmentVariables() {
 	DatabaseName = strings.TrimSpace(os.Getenv("DATABASE_NAME"))
 
 	ConnectRedis = strings.TrimSpace(os.Getenv("CONNECT_REDIS"))
+	RedisConnectionType = strings.TrimSpace(os.Getenv("REDIS_CONNECTION_TYPE")) // MASTER_SLAVE / SENTINEL / CLUSTER
 	RedisServerForWrite = strings.TrimSpace(os.Getenv("REDIS_SERVER_FOR_WRITE"))
 	RedisServerForRead = strings.TrimSpace(os.Getenv("REDIS_SERVER_FOR_READ"))
 	RedisServerPassword = strings.TrimSpace(os.Getenv("REDIS_SERVER_PASSWORD"))
+
+	RedisSentinelServer = strings.TrimSpace(os.Getenv("REDIS_SENTINEL_SERVER"))
+	RedisSentinelMasterName = strings.TrimSpace(os.Getenv("REDIS_SENTINEL_MASTER_NAME"))
 
 	ConnectRabbitMQ = strings.TrimSpace(os.Getenv("CONNECT_RABBITMQ"))
 	RabbitMQUser = strings.TrimSpace(os.Getenv("RABBITMQ_USER"))
@@ -53,10 +60,17 @@ func InitEnvironmentVariables() {
 		RabbitMQConnectionUrl = "amqp://" + RabbitMQUser + ":" + RabbitMQPassword + "@" + RabbitMQServer + ":5672/"
 	}
 
+	//ConnectRedis = "true"
+	//RedisConnectionType = "SENTINEL"
+	//RedisSentinelServer = "localhost:26379"
+	//RedisSentinelMasterName = "mymaster"
+	//RedisServerPassword = "123456"
+
 	log.Println("Run Mode: " + RunMode)
 	log.Println("Server Port: " + ServerPort)
 	log.Println("Mongo Connect: " + ConnectMongo)
 	log.Println("Redis Connect: " + ConnectRedis)
+	log.Println("Redis Connect Type: " + RedisConnectionType)
 	log.Println("Rabbitmq Connect: " + ConnectRabbitMQ)
 
 	if ConnectMongo == "true" {
@@ -65,9 +79,14 @@ func InitEnvironmentVariables() {
 	}
 
 	if ConnectRedis == "true" {
-		log.Println("Redis Server For Write: " + RedisServerForWrite)
-		log.Println("Mongo Server For Read: " + RedisServerForRead)
-		log.Println("Mongo Server Password: " + RedisServerPassword)
+		if RedisConnectionType == "SENTINEL" {
+			log.Println("Redis Sentinel Server: " + RedisSentinelServer)
+			log.Println("Mongo Server Master Name: " + RedisSentinelMasterName)
+		} else {
+			log.Println("Redis Server For Write: " + RedisServerForWrite)
+			log.Println("Mongo Server For Read: " + RedisServerForRead)
+		}
+		log.Println("Redis Server Password: " + RedisServerPassword)
 	}
 
 	if ConnectRabbitMQ == "true" {

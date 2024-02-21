@@ -29,8 +29,12 @@ func main() {
 	}
 
 	if config.ConnectRedis == "true" {
-		_ = cp_redis.InitRedisWriteConnection()
-		_ = cp_redis.InitRedisReadConnection()
+		if config.RedisConnectionType == "SENTINEL" {
+			_ = cp_redis.InitRedisSentinelConnection()
+		} else {
+			_ = cp_redis.InitRedisWriteConnection()
+			_ = cp_redis.InitRedisReadConnection()
+		}
 	}
 
 	if config.ConnectRabbitMQ == "true" {
