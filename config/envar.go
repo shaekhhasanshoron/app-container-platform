@@ -60,11 +60,9 @@ func InitEnvironmentVariables() {
 		RabbitMQConnectionUrl = "amqp://" + RabbitMQUser + ":" + RabbitMQPassword + "@" + RabbitMQServer + ":5672/"
 	}
 
-	//ConnectRedis = "true"
-	//RedisConnectionType = "SENTINEL"
-	//RedisSentinelServer = "localhost:26379"
-	//RedisSentinelMasterName = "mymaster"
-	//RedisServerPassword = "123456"
+	if RedisSentinelMasterName == "" {
+		RedisSentinelMasterName = "mymaster"
+	}
 
 	log.Println("Run Mode: " + RunMode)
 	log.Println("Server Port: " + ServerPort)

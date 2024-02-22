@@ -15,9 +15,12 @@ type CommonAPiInf interface {
 }
 
 type commonApi struct {
+	threadsVal int
+	keys       []string
+	data       string
 }
 
-func (c2 commonApi) PullFromRedisAndPublishToRabbitMQ(c echo.Context) error {
+func (c2 *commonApi) PullFromRedisAndPublishToRabbitMQ(c echo.Context) error {
 	queue := c.QueryParam("queue")
 	if queue == "" {
 		queue = "default"
@@ -28,32 +31,34 @@ func (c2 commonApi) PullFromRedisAndPublishToRabbitMQ(c echo.Context) error {
 		threads = "1"
 	}
 
-	threadsVal, _ := strconv.Atoi(threads)
+	c2.threadsVal, _ = strconv.Atoi(threads)
 
-	keys, err := cp_redis.GetAllKeys()
+	var err error
+	c2.keys, err = cp_redis.GetAllKeys()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, "error getting key from redis")
 	}
 
-	for i := 0; i < threadsVal; i++ {
-		go syncToQueue(keys, queue)
+	for i := 0; i < c2.threadsVal; i++ {
+		go c2.syncToQueue(c2.keys, queue)
 	}
 
 	return c.JSON(http.StatusOK, "sync has been started")
 }
 
-func syncToQueue(keys []string, queue string) {
-	log.Println("Sync has been started; Queue - " + queue)
+func (c2 *commonApi) syncToQueue(keys []string, queue string) {
+	//log.Println("Sync has been started; Queue - " + queue)
 
 	for i, key := range keys {
-		data, err := cp_redis.Get(key)
+		var err error
+		c2.data, err = cp_redis.Get(key)
 		if err != nil {
 			log.Println(fmt.Sprintf("[ERROR] sync error - gettting data for key '%s': %s", key, err.Error()))
 			continue
 		}
 		log.Printf("publishing data from redis -- %v :key: %v\n", i, key)
 
-		err = cp_rabbitmq.PublishToRabbitMQ(queue, data)
+		err = cp_rabbitmq.PublishToRabbitMQ(queue, c2.data)
 		if err != nil {
 			log.Println(fmt.Sprintf("[ERROR] sync error - publishing in rabbitmq for key '%s': %s", key, err.Error()))
 			continue
@@ -62,5 +67,5 @@ func syncToQueue(keys []string, queue string) {
 }
 
 func CommonApi() CommonAPiInf {
-	return &commonApi{}
+	return new(commonApi)
 }

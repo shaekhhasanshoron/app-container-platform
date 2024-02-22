@@ -25,7 +25,7 @@ func InitRedisSentinelConnection() error {
 	redisSentinelClient := redis.NewFailoverClient(&redis.FailoverOptions{
 		MasterName:       config.RedisSentinelMasterName,
 		SentinelAddrs:    []string{fmt.Sprintf(config.RedisSentinelServer)},
-		PoolSize:         100,
+		PoolSize:         1000,
 		MaxRetries:       5,
 		Password:         config.RedisServerPassword,
 		SentinelPassword: config.RedisServerPassword,
