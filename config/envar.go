@@ -79,10 +79,10 @@ func InitEnvironmentVariables() {
 	if ConnectRedis == "true" {
 		if RedisConnectionType == "SENTINEL" {
 			log.Println("Redis Sentinel Server: " + RedisSentinelServer)
-			log.Println("Mongo Server Master Name: " + RedisSentinelMasterName)
+			log.Println("Redis Server Master Name: " + RedisSentinelMasterName)
 		} else {
 			log.Println("Redis Server For Write: " + RedisServerForWrite)
-			log.Println("Mongo Server For Read: " + RedisServerForRead)
+			log.Println("Redis Server For Read: " + RedisServerForRead)
 		}
 		log.Println("Redis Server Password: " + RedisServerPassword)
 	}
