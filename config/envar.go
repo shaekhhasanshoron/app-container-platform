@@ -64,27 +64,59 @@ func InitEnvironmentVariables() {
 		RedisSentinelMasterName = "mymaster"
 	}
 
+	if ConnectMongo == "" {
+		ConnectMongo = "false"
+	}
+	if ConnectRedis == "" {
+		ConnectRedis = "false"
+	}
+	if ConnectRabbitMQ == "" {
+		ConnectRabbitMQ = "false"
+	}
+
 	log.Println("Run Mode: " + RunMode)
 	log.Println("Server Port: " + ServerPort)
 	log.Println("Mongo Connect: " + ConnectMongo)
 	log.Println("Redis Connect: " + ConnectRedis)
-	log.Println("Redis Connect Type: " + RedisConnectionType)
 	log.Println("Rabbitmq Connect: " + ConnectRabbitMQ)
 
 	if ConnectMongo == "true" {
-		log.Println("Mongo Conn String For Write: " + MongoDbConnectionStringForWrite)
-		log.Println("Mongo Conn String For Read: " + MongoDbConnectionStringForRead)
+		if MongoDbConnectionStringForWrite == "" || MongoDbConnectionStringForRead == "" || DatabaseName == "" {
+			log.Println("Unable to connect to Mongo! Missing required values")
+			os.Exit(0)
+		} else {
+			log.Println("Mongo Connection String For Write: " + MongoDbConnectionStringForWrite)
+			log.Println("Mongo Connection String For Read: " + MongoDbConnectionStringForRead)
+			log.Println("Database Name: " + DatabaseName)
+		}
 	}
 
 	if ConnectRedis == "true" {
+		if RedisConnectionType == "" {
+			log.Println("Unable to connect to Redis! Missing connect Type")
+			os.Exit(0)
+		}
+
+		log.Println("Redis Connect Type: " + RedisConnectionType)
 		if RedisConnectionType == "SENTINEL" {
+			if RedisSentinelServer == "" || RedisSentinelMasterName == "" {
+				log.Println("Unable to connect to Redis! Missing required values")
+				os.Exit(0)
+			}
 			log.Println("Redis Sentinel Server: " + RedisSentinelServer)
 			log.Println("Redis Server Master Name: " + RedisSentinelMasterName)
 		} else {
+			if RedisServerForWrite == "" || RedisServerForRead == "" {
+				log.Println("Unable to connect to Redis! Missing required values")
+				os.Exit(0)
+			}
 			log.Println("Redis Server For Write: " + RedisServerForWrite)
 			log.Println("Redis Server For Read: " + RedisServerForRead)
 		}
-		log.Println("Redis Server Password: " + RedisServerPassword)
+
+		if RedisServerPassword != "" {
+			log.Println("Redis Server Password: " + RedisServerPassword)
+		}
 	}
 
 	if ConnectRabbitMQ == "true" {
