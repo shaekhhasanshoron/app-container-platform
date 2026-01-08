@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-container-platform
+    role: klovercloud
+  name: app-container-platform
+  namespace: klovercloud
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: app-container-platform
+      role: klovercloud
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /prometheus
+        prometheus.io/port: "8081"
+        prometheus.io/scrape: "true"
+      labels:
+        app: app-container-platform
+        role: klovercloud
+    spec:
+      containers:
+        - envFrom:
+           - configMapRef:
+              name: app-container-platform
+          image: quay.io/klovercloud/app-container-platform:v1.0.0
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 15
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: klovercloud-metrics
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8081
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 15
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 30m
+              memory: 50Mi
+            requests:
+              cpu: 20m
+              memory: 20Mi

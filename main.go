@@ -2,6 +2,7 @@ package main
 
 import (
 	"app-container-platform/config"
+	cp_kafka_consumer "app-container-platform/db/cp_kafka/consumer"
 	"app-container-platform/db/cp_mongodb"
 	"app-container-platform/db/cp_rabbitmq"
 	"app-container-platform/db/cp_redis"
@@ -22,6 +23,8 @@ func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c 
 
 func main() {
 	config.InitEnvironmentVariables()
+	config.InitiateLog()
+
 	if config.ConnectMongo == "true" {
 		_ = cp_mongodb.InitMongoDbWriteConnection()
 		_ = cp_mongodb.InitMongoDbReadConnection()
@@ -39,6 +42,10 @@ func main() {
 
 	if config.ConnectRabbitMQ == "true" {
 		_ = cp_rabbitmq.InitRabbitMQConnection()
+	}
+
+	if config.ConnectKafka == "true" {
+		go cp_kafka_consumer.ListenEvents()
 	}
 
 	srv := server.New()

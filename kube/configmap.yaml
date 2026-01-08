@@ -1,0 +1,17 @@
+apiVersion: v1
+data:
+  CONNECT_KAFKA: "true"
+  KAFKA_BROKER: "kc-kafka-svc.klovercloud:9092"
+  KAFKA_CONSUMER_GROUP: "app-container-platform"
+  KAFKA_LISTENER_TOPIC: "active-log"
+  LOG_MODE: "DEBUG"
+  RUN_MODE: "PRODUCTION"
+  SERVER_PORT: "8080"
+kind: ConfigMap
+metadata:
+  labels:
+    app: app-container-platform
+    role: klovercloud
+  name: app-container-platform
+  namespace: klovercloud
+

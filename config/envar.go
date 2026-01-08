@@ -7,6 +7,7 @@ import (
 )
 
 var RunMode string
+var LogMode string
 var ServerPort string
 var ConnectMongo string
 var MongoDbConnectionStringForWrite string
@@ -27,10 +28,20 @@ var RabbitMQPassword string
 var RabbitMQServer string
 var RabbitMQConnectionUrl string
 
+var ConnectKafka string
+var KafkaBroker string
+var KafkaConsumerGroup string
+var KafkaListenerTopic string
+
 func InitEnvironmentVariables() {
 	RunMode = strings.TrimSpace(os.Getenv("RUN_MODE"))
 	if RunMode == "" {
 		RunMode = "DEVELOP"
+	}
+
+	LogMode = strings.TrimSpace(os.Getenv("LOG_MODE"))
+	if RunMode == "" {
+		RunMode = "INFO"
 	}
 
 	ServerPort = strings.TrimSpace(os.Getenv("SERVER_PORT"))
@@ -51,6 +62,15 @@ func InitEnvironmentVariables() {
 
 	RedisSentinelServer = strings.TrimSpace(os.Getenv("REDIS_SENTINEL_SERVER"))
 	RedisSentinelMasterName = strings.TrimSpace(os.Getenv("REDIS_SENTINEL_MASTER_NAME"))
+
+	ConnectKafka = strings.TrimSpace(os.Getenv("CONNECT_KAFKA"))
+	KafkaBroker = strings.TrimSpace(os.Getenv("KAFKA_BROKER"))
+	KafkaConsumerGroup = strings.TrimSpace(os.Getenv("KAFKA_CONSUMER_GROUP"))
+	KafkaListenerTopic = strings.TrimSpace(os.Getenv("KAFKA_LISTENER_TOPIC"))
+
+	if KafkaConsumerGroup == "" {
+		KafkaConsumerGroup = "klovercloud-multicluster-notification"
+	}
 
 	ConnectRabbitMQ = strings.TrimSpace(os.Getenv("CONNECT_RABBITMQ"))
 	RabbitMQUser = strings.TrimSpace(os.Getenv("RABBITMQ_USER"))
@@ -124,5 +144,11 @@ func InitEnvironmentVariables() {
 		log.Println("rabbitMQ server: " + RabbitMQServer)
 		log.Println("rabbitMQ user: " + RabbitMQUser)
 		log.Println("rabbitMQ password: " + RabbitMQPassword)
+	}
+
+	if ConnectKafka == "true" {
+		log.Println("connection kafka broker: " + KafkaBroker)
+		log.Println("rabbitMQ consumer: " + KafkaConsumerGroup)
+		log.Println("rabbitMQ listener topic: " + KafkaListenerTopic)
 	}
 }
